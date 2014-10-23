@@ -11,6 +11,7 @@
 		}
 	}
 	fnClass.prototype={
+		//1-10
 		hasClass:function(sClassName){
 			var sClassList=this.elems.className;
 			if(!sClassList){
