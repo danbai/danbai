@@ -9,25 +9,26 @@
 	.current{color:#0f0;}
 	.current1{color:#f00;}
 	.current2{color:#00f;}
+	p{font-size:12px;position:absolute;left:100px;top:100px;opacity:0.2;filter:alpha(opacity:20);}
 	</style>
 </head>
 <body>
-	<form>
-		<input type="text">
-		<input type="submit">
-	</form>
-	
+	<button id="block">显示</button>
+	<button id="none">隐藏</button>
+	<button id="toggle">切换</button>
+	<p>2222</p>
 <script src="danPro.js"></script>
 <script>
 $(window).ready(function(){
-	$("input").toggle(
-		function(){
-			$("input").css("background","#ccc");
-		},
-		function(){
-			$("input").css("background","#fff");
-		}
-	);
+	$("#block").on('click',function(){
+		$("p").show();
+	});
+	$("#none").on('click',function(){
+		$("p").hide();
+	});
+	$("#toggle").on('click',function(){
+		$("p").toggle();
+	});
 });
 </script>
 </body>
