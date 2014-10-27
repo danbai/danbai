@@ -9,13 +9,26 @@
 	.current{color:#0f0;}
 	.current1{color:#f00;}
 	.current2{color:#00f;}
-	canvas{border:1px solid #ccc;}
 	</style>
 </head>
 <body>
-	<canvas id="square" width="1000" height="1000"></canvas>
+	<form>
+		<input type="text">
+		<input type="submit">
+	</form>
+	
+<script src="danPro.js"></script>
 <script>
-
+$(window).ready(function(){
+	$("input").toggle(
+		function(){
+			$("input").css("background","#ccc");
+		},
+		function(){
+			$("input").css("background","#fff");
+		}
+	);
+});
 </script>
 </body>
 </html>
