@@ -15,6 +15,14 @@
 			this.elems = document.querySelector(sSel);
 		}
 	}
+	function getStyle(obj, sStyle) {
+		if (obj.currentStyle) {
+			return obj.currentStyle[sStyle];
+		} 
+		else {
+			return getComputedStyle(obj, false)[sStyle];
+		}
+	}
 	fnClass.prototype = {
 		//1-10
 		hasClass: function(sClassName) {
@@ -88,35 +96,55 @@
 		},
 		//jquery效果
 		animate: function(o, time, callback) {
-			function getStyle(obj, sStyle) {
-				if (obj.currentStyle) {
-					return obj.currentStyle[sStyle];
-				} else {
-					return getComputedStyle(obj, false)[sStyle];
-				}
-			}
+			
 			var self = this;
 			for (var i in o) {
 				(function(i) {
 					var nTarget = parseFloat(o[i]);
 					var nStart = parseFloat(getStyle(self.elems, i));
-					var timer = setInterval(function() {
-						var nCurrent = parseFloat(getStyle(self.elems, i));
-						if (nCurrent < nTarget) {
-							if (i == "opacity") {
-								self.elems.style.opacity = nCurrent + (time ? (nTarget - nStart) / (1000 / 30) : 10);
-								self.elems.style.filter = 'alpha(opacity: ('+(nCurrent + (time ? (nTarget - nStart) / (1000 / 30) : 10))+')';
+					var speed=time ? (nTarget - nStart) / (time / 30) : 10;
+					if(speed>0){
+						var timer = setInterval(function() {
+							var nCurrent = parseFloat(getStyle(self.elems, i));
+							if (nCurrent < nTarget) {
+								if (i == "opacity") {
+									self.elems.style.opacity = nCurrent + speed;
+									self.elems.style.filter = 'alpha(opacity: ('+(nCurrent + speend)+')';
+								} 
+								else{
+									self.elems.style[i] = nCurrent + speed + "px";
+								}
 							} 
-							else{
-								self.elems.style[i] = nCurrent + (time ? (nTarget - nStart) / (1000 / 30) : 10) + "px";
+							else {
+								self.elems.style[i] = o[i];
+								clearInterval(timer);
+								if(callback){
+									callback();
+								}
 							}
-						} 
-						else {
-							self.elems.style[i] = o[i];
-							clearInterval(timer);
-							callback();
-						}
-					}, 30);
+						}, 30);
+					}
+					else if(speed<0){
+						var timer = setInterval(function() {
+							var nCurrent = parseFloat(getStyle(self.elems, i));
+							if (nCurrent > nTarget) {
+								if (i == "opacity") {
+									self.elems.style.opacity = nCurrent + speed;
+									self.elems.style.filter = 'alpha(opacity: ('+(nCurrent + speend)+')';
+								} 
+								else{
+									self.elems.style[i] = ((nCurrent + speed)>0? (nCurrent + speed):0) + "px";
+								}
+							} 
+							else {
+								self.elems.style[i] = o[i];
+								clearInterval(timer);
+								if(callback){
+									callback();
+								}
+							}
+						}, 30);
+					}
 				}(i));
 			}
 			return this;
@@ -130,13 +158,131 @@
 			return this;
 		},
 		toggle:function(){
-			if(this.elems.style.display=="block"){
-				this.elems.style.display="none";
+			if(getStyle(this.elems,"display")=="block"){
+				this.hide();
 			}
 			else{
-				this.elems.style.display="block";
+				this.show();
 			}
+			return this;
+		},
+		delay:function(callback,time){
+			setTimeout(callback,time);
+			return this;
+		},
+		fadeIn:function(time){
+			var self=this.elems;
+			this.show();
+			var nStart=getStyle(this.elems,"opacity")*100;
+			var speed=time ? (100-nStart)/(time/30) : 10
+			var timer=setInterval(function(){
+				var nCurrent=getStyle(self,"opacity")*100;
+				if(nCurrent<100){
+					self.style.opacity=(nCurrent+speed)/100;
+					self.style.filter='alpha(opacity:'+(nCurrent+speed)+')';
+				}
+				else{
+					clearInterval(timer);
+					self.style.opacity=1;
+					self.style.filter='alpha(opacity:100)';
+				}
+			},30);
+			return this;
+		},
+		fadeOut:function(time){
+			var self=this.elems;
+			var nStart=getStyle(this.elems,"opacity")*100;
+			var speed=time ? (nStart-0)/(time/30) : 10;
+			var timer=setInterval(function(){
+				var nCurrent=getStyle(self,"opacity")*100;
+				if(nCurrent>0){
+					self.style.opacity=(nCurrent-speed)/100;
+					self.style.filter='alpha(opacity:'+(nCurrent-speed)+')';
+				}
+				else{
+					clearInterval(timer);
+					self.style.opacity=0;
+					self.style.filter='alpha(opacity:0)';
+					self.style.display="none";
+				}
+			},30);
+			return this;
+		},
+		fadeTo:function(time,nTarget){
+			this.show();
+			var self=this.elems;
+			var nStart=getStyle(this.elems,"opacity")*100;
+			nTarget=nTarget*100;
+			var speed=(nTarget-nStart)/(time/30);
+			if(speed>0){
+				var timer=setInterval(function(){
+					var nCurrent=getStyle(self,"opacity")*100;
+					if(nCurrent<nTarget){
+						self.style.opacity=(nCurrent+speed)/100;
+						self.style.filter='alpha(opacity:'+(nCurrent+speed)+')';
+					}
+					else{
+						clearInterval(timer);
+						self.style.opacity=nTarget/100;
+						self.style.filter='alpha(opacity:'+nTarget+')';
+					}
+				},30);
+			}
+			else if(speed<0){
+				var timer=setInterval(function(){
+					var nCurrent=getStyle(self,"opacity")*100;
+					if(nCurrent>nTarget){
+						self.style.opacity=(nCurrent+speed)/100;
+						self.style.filter='alpha(opacity:'+(nCurrent+speed)+')';
+					}
+					else{
+						clearInterval(timer);
+						self.style.opacity=nTarget/100;
+						self.style.filter='alpha(opacity:'+nTarget+')';
+					}
+				},30);
+			}
+			return this;
+		},
+		height:function(param){
+			if(param||param==0){
+				this.elems.style.height=param+"px";
+				return this;
+			}
+			return this.elems.clientHeight;
+		},
+		width:function(param){
+			if(param){
+				this.elems.style.width=param+"px";
+				return this;
+			}
+			return this.elems.clientWidth;
+		},
+		slideDown:function(time){
+			this.show();
+			var nOldHeight=this.height();
+			this.height(0);
+			this.animate({"height":nOldHeight+"px"},time);
+			return this;
+		},
+		slideUp:function(time){
+			var self=this;
+			var nOldHeight=this.height();
+			this.animate({"height":0+"px"},time,function(){
+				self.hide().height(nOldHeight);
+			});
+			return this;
+		},
+		slideToggle:function(time){
+			if(getStyle(this.elems,"display")=="none"){
+				this.slideDown(time);
+			}
+			else{
+				this.slideUp(time);
+			}
+			return this;
 		}
+		//jquery文档操作
 	}
 	window.$ = function() {
 		return new fnClass(arguments[0]);

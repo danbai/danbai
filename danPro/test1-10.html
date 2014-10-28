@@ -9,25 +9,18 @@
 	.current{color:#0f0;}
 	.current1{color:#f00;}
 	.current2{color:#00f;}
-	p{font-size:12px;position:absolute;left:100px;top:100px;opacity:0.2;filter:alpha(opacity:20);}
+	p{width:200px;height:200px;border:1px solid #ccc;margin-top:100px;display:none;}
 	</style>
 </head>
 <body>
-	<button id="block">显示</button>
-	<button id="none">隐藏</button>
-	<button id="toggle">切换</button>
+	<button id="btn1">fadeIn</button>
+	<button id="btn2">fadeOut</button>
 	<p>2222</p>
 <script src="danPro.js"></script>
 <script>
 $(window).ready(function(){
-	$("#block").on('click',function(){
-		$("p").show();
-	});
-	$("#none").on('click',function(){
-		$("p").hide();
-	});
-	$("#toggle").on('click',function(){
-		$("p").toggle();
+	$("#btn1").on('click',function(){
+		$("p").slideToggle(500);
 	});
 });
 </script>
