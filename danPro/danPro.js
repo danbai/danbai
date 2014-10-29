@@ -24,44 +24,6 @@
 		}
 	}
 	fnClass.prototype = {
-		//1-10
-		hasClass: function(sClassName) {
-			var sClassList = this.elems.className;
-			if (!sClassList) {
-				return false;
-			}
-			var rHasClass = new RegExp('\\b' + sClassName + '\\b');
-			if (rHasClass.test(sClassList)) {
-				return true;
-			}
-			return false;
-		},
-		addClass: function(sClassName) {
-			var sClassList = this.elems.className;
-			if (this.hasClass(sClassName)) {
-				return this;
-			}
-			sClassName = sClassList.length ? (" " + sClassName) : sClassName;
-			this.elems.className += sClassName;
-			return this;
-		},
-		removeClass: function(sClassName) {
-			var sClassList = this.elems.className;
-			if (!this.hasClass(className)) {
-				return this;
-			}
-			var rRemoveClass = new RegExp('\\b\\s*' + sClassName + '\\b', "g");
-			this.elems.className = sClassList.replace(rRemoveClass, "");
-			return this;
-		},
-		toggleClass: function(sClassName) {
-			if (this.hasClass(sClassName)) {
-				this.removeClass(sClassName);
-			} else {
-				this.addClass(sClassName);
-			}
-			return this;
-		},
 		//jquery事件
 		on: function(type, callback) {
 			if (this.elems.addEventListener) {
@@ -281,8 +243,193 @@
 				this.slideUp(time);
 			}
 			return this;
-		}
+		},
 		//jquery文档操作
+		hasClass: function(sClassName) {
+			var sClassList = this.elems.className;
+			if (!sClassList) {
+				return false;
+			}
+			var rHasClass = new RegExp('\\b' + sClassName + '\\b');
+			if (rHasClass.test(sClassList)) {
+				return true;
+			}
+			return false;
+		},
+		addClass: function(sClassName) {
+			var sClassList = this.elems.className;
+			if (this.hasClass(sClassName)) {
+				return this;
+			}
+			sClassName = sClassList.length ? (" " + sClassName) : sClassName;
+			this.elems.className += sClassName;
+			return this;
+		},
+		removeClass: function(sClassName) {
+			var sClassList = this.elems.className;
+			if (!this.hasClass(className)) {
+				return this;
+			}
+			var rRemoveClass = new RegExp('\\b\\s*' + sClassName + '\\b', "g");
+			this.elems.className = sClassList.replace(rRemoveClass, "");
+			return this;
+		},
+		toggleClass: function(sClassName) {
+			if (this.hasClass(sClassName)) {
+				this.removeClass(sClassName);
+			} else {
+				this.addClass(sClassName);
+			}
+			return this;
+		},
+		append:function(node){
+			if(typeof node==="string"){
+				if(node.indexOf("<")>-1){
+					var re1=/<(\w+)>/;
+					var re2=/<\/?(\w+)>/g;
+					var aResult=node.match(re1);	//["<h1>",h1]
+					var sNodeText=node.replace(re2,"");	//"333"
+					node=document.createElement(aResult[1]);
+					node.innerHTML=sNodeText;
+				}
+				else{
+					node=document.createTextNode(node);
+				}
+			}
+			else if("elems" in node){
+				node=node.elems;
+			}
+			this.elems.appendChild(node);
+			return this;
+		},
+		prepend:function(node){
+			if(typeof node==="string"){
+				if(node.indexOf("<")>-1){
+					var re1=/<(\w+)>/;
+					var re2=/<\/?(\w+)>/g;
+					var aResult=node.match(re1);	//["<h1>",h1]
+					var sNodeText=node.replace(re2,"");	//"333"
+					node=document.createElement(aResult[1]);
+					node.innerHTML=sNodeText;
+				}
+				else{
+					node=document.createTextNode(node);
+				}
+			}
+			else if("elems" in node){
+				node=node.elems;
+			}
+			this.elems.insertBefore(node,this.elems.firstChild);
+			return this;
+		},
+		before:function(node){
+			if(typeof node==="string"){
+				if(node.indexOf("<")>-1){
+					var re1=/<(\w+)>/;
+					var re2=/<\/?(\w+)>/g;
+					var aResult=node.match(re1);	//["<h1>",h1]
+					var sNodeText=node.replace(re2,"");	//"333"
+					node=document.createElement(aResult[1]);
+					node.innerHTML=sNodeText;
+				}
+				else{
+					node=document.createTextNode(node);
+				}
+			}
+			else if("elems" in node){
+				node=node.elems;
+			}
+			this.elems.parentNode.insertBefore(node,this.elems);
+			return this;
+		},
+		after:function(node){
+			if(typeof node==="string"){
+				if(node.indexOf("<")>-1){
+					var re1=/<(\w+)>/;
+					var re2=/<\/?(\w+)>/g;
+					var aResult=node.match(re1);	//["<h1>",h1]
+					var sNodeText=node.replace(re2,"");	//"333"
+					node=document.createElement(aResult[1]);
+					node.innerHTML=sNodeText;
+				}
+				else{
+					node=document.createTextNode(node);
+				}
+			}
+			else if("elems" in node){
+				node=node.elems;
+			}
+			this.elems.parentNode.insertBefore(node,this.elems.nextSibling);
+			return this;
+		},
+		replaceWith:function(node){
+			if(typeof node==="string"){
+				if(node.indexOf("<")>-1){
+					var re1=/<(\w+)>/;
+					var re2=/<\/?(\w+)>/g;
+					var aResult=node.match(re1);	//["<h1>",h1]
+					var sNodeText=node.replace(re2,"");	//"333"
+					node=document.createElement(aResult[1]);
+					node.innerHTML=sNodeText;
+				}
+				else{
+					node=document.createTextNode(node);
+				}
+			}
+			else if("elems" in node){
+				node=node.elems;
+			}
+			this.elems.parentNode.replaceChild(node,this.elems);
+			return this;
+		},
+		appendTo:function(node){
+			if(typeof node==="string"){
+					node=$(node).elems;
+			}
+			else{
+				node=node.elems;
+			}
+			node.appendChild(this.elems);
+		},
+		prependTo:function(node){
+			if(typeof node==="string"){
+					node=$(node).elems;
+			}
+			else{
+				node=node.elems;
+			}
+			node.insertBefore(this.elems,node.firstChild);
+		},
+		insertBefore:function(node){
+			if(typeof node==="string"){
+					node=$(node).elems;
+			}
+			else{
+				node=node.elems;
+			}
+			node.parentNode.insertBefore(this.elems,node);
+		},
+		insertAfter:function(node){
+			if(typeof node==="string"){
+					node=$(node).elems;
+			}
+			else{
+				node=node.elems;
+			}
+			node.parentNode.insertBefore(this.elems,node.nextSibling);
+		},
+		replaceAll:function(node){
+			if(typeof node==="string"){
+					node=$(node).elems;
+			}
+			else{
+				node=node.elems;
+			}
+			node.parentNode.replaceChild(this.elems,node);
+		},
+		attr:function(){
+			
+		}
 	}
 	window.$ = function() {
 		return new fnClass(arguments[0]);

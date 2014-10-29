@@ -9,18 +9,19 @@
 	.current{color:#0f0;}
 	.current1{color:#f00;}
 	.current2{color:#00f;}
-	p{width:200px;height:200px;border:1px solid #ccc;margin-top:100px;display:none;}
 	</style>
 </head>
 <body>
-	<button id="btn1">fadeIn</button>
-	<button id="btn2">fadeOut</button>
-	<p>2222</p>
+	<h2>first</h2>
+	<span>span</span>
+    <button>button</button>
+    <p>2222</p>
 <script src="danPro.js"></script>
 <script>
 $(window).ready(function(){
-	$("#btn1").on('click',function(){
-		$("p").slideToggle(500);
+	$("button").on('click',function(){
+		$("p").replaceAll("h2");
+		$("p").replaceWith("span");
 	});
 });
 </script>
