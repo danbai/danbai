@@ -7,11 +7,11 @@
 	function fnClass(sSel) {
 		if (sSel == document || sSel == window) {
 			this.elems = sSel;
-		} else if (sSel == "body") {
+		} 
+		else if (sSel == "body") {
 			this.elems = document.body;
-		} else if (sSel == this) {
-			this.elems = this;
-		} else {
+		} 
+		else {
 			this.elems = document.querySelector(sSel);
 		}
 	}
@@ -427,9 +427,44 @@
 			}
 			node.parentNode.replaceChild(this.elems,node);
 		},
-		attr:function(){
-			
-		}
+		attr:function(attr,value){
+			if(arguments.length==2){
+				this.elems.setAttribute(attr,value);
+			}
+			else if(arguments.length==1){
+				if(typeof attr==="string"){
+					return this.elems.getAttribute(attr);
+				}
+				else if(typeof attr==="object"){
+					for(var i in attr){
+						this.elems.setAttribute(i,attr[i]);
+					}
+				}
+			}
+			return this;
+		},
+		clone:function(){
+			return this.elems.cloneNode(true);
+		},
+		detach:function(){
+			this.elems.parentNode.removeChild(this.elems);
+			return this;
+		},
+		remove:function(){
+			this.elems.parentNode.removeChild(this.elems);
+		},
+		empty:function(){
+			this.elems.innerHTML="";
+		},
+		html:function(para){
+
+		},
+		text:function(){
+
+		},
+		val:function(){
+
+		}	
 	}
 	window.$ = function() {
 		return new fnClass(arguments[0]);

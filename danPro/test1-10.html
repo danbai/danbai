@@ -9,19 +9,23 @@
 	.current{color:#0f0;}
 	.current1{color:#f00;}
 	.current2{color:#00f;}
+	p[data-id]{
+		border:1px solid #ccc;
+	}
 	</style>
 </head>
 <body>
-	<h2>first</h2>
-	<span>span</span>
-    <button>button</button>
+	<h1>1111</h1>
     <p>2222</p>
+    <button>click</button>
 <script src="danPro.js"></script>
 <script>
 $(window).ready(function(){
 	$("button").on('click',function(){
-		$("p").replaceAll("h2");
-		$("p").replaceWith("span");
+		$("h1").append($("p").detach());
+	});
+	$("h1").on('click',function(){
+		$("h1").empty();
 	});
 });
 </script>
