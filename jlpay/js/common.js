@@ -22,5 +22,5 @@ $(function() {
 		}
 	}
 	Page.init();
-	//add
+	//addadd
 });
