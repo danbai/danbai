@@ -22,4 +22,5 @@ $(function() {
 		}
 	}
 	Page.init();
+	//add
 });
